@@ -228,8 +228,8 @@ class ResolveInfo
                 $newElement = $descend > 0 && ! empty($selectionNode->selectionSet)
                     ? $this->foldSelectionSet($selectionNode->selectionSet, $descend - 1)
                     : true;
-                if(!empty($fields[$selectionNode->name->value])){
-                    array_push($fields[$selectionNode->name->value], $newElement);
+                if(!empty($fields[$selectionNode->name->value]) && is_array($newElement)){
+                    $fields[$selectionNode->name->value] = array_merge($fields[$selectionNode->name->value], $newElement);
                 }else{
                     $fields[$selectionNode->name->value] = $newElement;
                 }
