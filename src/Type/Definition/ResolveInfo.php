@@ -225,9 +225,14 @@ class ResolveInfo
         $fields = [];
         foreach ($selectionSet->selections as $selectionNode) {
             if ($selectionNode instanceof FieldNode) {
-                $fields[$selectionNode->name->value] = $descend > 0 && ! empty($selectionNode->selectionSet)
+                $newElement = $descend > 0 && ! empty($selectionNode->selectionSet)
                     ? $this->foldSelectionSet($selectionNode->selectionSet, $descend - 1)
                     : true;
+                if(!empty($fields[$selectionNode->name->value])){
+                    array_push($fields[$selectionNode->name->value], $newElement);
+                }else{
+                    $fields[$selectionNode->name->value] = $newElement;
+                }
             } elseif ($selectionNode instanceof FragmentSpreadNode) {
                 $spreadName = $selectionNode->name->value;
                 if (isset($this->fragments[$spreadName])) {
